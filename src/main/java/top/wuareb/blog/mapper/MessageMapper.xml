@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper  3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wuareb.blog.mapper.MessageMapper">
+	<select id="findAllMessage" resultType="top.wuareb.blog.domain.vo.message.MessageCustom">
+		select t_message.*,t_user.username,t_user.userUrl from t_message,t_user 
+			where t_message.uid  = t_user.id order by date DESC
+	</select>
+	<select id="findReplyByMid" resultType="top.wuareb.blog.domain.vo.comment.ReplyCustom" parameterType="int">
+		select t_reply.*,t_user.username,t_user.userUrl from t_reply,t_user 
+			where t_reply.mid = #{id} and t_reply.uid = t_user.id order by date DESC
+	</select>
+	<select id="findReplyByMsgId" resultType="top.wuareb.blog.domain.vo.comment.ReplyCustom" parameterType="int">
+		select t_reply.*,t_user.username,t_user.userUrl from t_reply,t_user 
+			where t_reply.mid = #{id} and t_reply.uid = t_user.id order by date
+	</select>
+	
+	<select id="findPname" resultType="String" parameterType="int">
+		select t_user.username from t_reply,t_user where t_reply.uid = t_user.id and t_reply.id = #{pid}
+	</select>
+	
+	<insert id="saveMessage" parameterType="top.wuareb.blog.domain.vo.message.Message">
+		insert into t_message(content,uid,warnNum,likeNum,date) values(#{content},#{uid},#{warnNum},#{likeNum},#{date})
+	</insert>
+	<insert id="msgReToMe" parameterType="top.wuareb.blog.domain.vo.comment.Reply">
+		insert into t_reply(content,date,warnNum,likeNum,uid,mid) values(#{content},#{date},#{warnNum},#{likeNum},#{uid},#{mid})
+	</insert>
+	<insert id="msgReToRe" parameterType="top.wuareb.blog.domain.vo.comment.Reply">
+		insert into t_reply(content,date,warnNum,likeNum,uid,pid,mid) values(#{content},#{date},#{warnNum},#{likeNum},#{uid},#{pid},#{mid})
+	</insert>
+	
+	<select id="findMessageByMid" resultType="top.wuareb.blog.domain.vo.message.Message" parameterType="int">
+		select * from t_message where id = #{id}
+	</select>
+	<insert id="saveAddrAndMessageid" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_reply_addr(addrid,messageid) values(#{id},#{messageid})
+	</insert>
+	<update id="updateMessageLikeNum" parameterType="top.wuareb.blog.domain.vo.message.Message">
+		update t_message set likeNum = #{likeNum} where id = #{id}
+	</update>
+	<select id="findAddrByMessageid" resultType="top.wuareb.blog.domain.vo.article.Address" parameterType="int">
+		select * from t_reply_addr where messageid = #{id}
+	</select>
+	
+	<select id="findMessageCount" resultType="int">
+		select count(*) from t_message
+	</select>
+	
+	<select id="findAllMessagePage" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom" resultType="top.wuareb.blog.domain.vo.message.MessageCustom">
+		select t_message.*,t_user.username from t_message,t_user
+			where t_message.uid = t_user.id order by t_message.date DESC 
+			limit #{startPage},#{ps}
+	</select>
+	
+	<delete id="deleteMessageById" parameterType="int">
+		delete from t_message where id = #{id}
+	</delete>
+</mapper>

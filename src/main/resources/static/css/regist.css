@@ -1,0 +1,118 @@
+body{
+    padding: 0;
+    margin: 0;
+    background-color: #f1f1f1;
+    color: #444;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+    font-size: 13px;
+    line-height: 1.4em;
+}
+/*登录窗口*/
+#register-form{
+    width: 380px;
+    padding: 11% 0 60px;
+    margin: auto;
+    font-size: 22px;
+}
+#register-form form{
+    background-color: #fff;
+    padding-bottom: 30px;
+    padding-left: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.13);
+}
+.td1{
+    width: 100px;
+    height: 30px;
+}
+.td2{
+    width: 190px;
+    height: 30px;
+}
+.td3{
+    width: 30px;
+    height: 30px;
+}
+.td3 img{
+    width: 20px;
+    height: 20px;
+}
+#register-form form input{
+    width: 190px;
+    height: 30px;
+    font-size: 22px;
+}
+#register-form form button{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 22px;
+    color: #ffffff;
+    padding: 6px 60px;
+    background: -moz-linear-gradient(
+            top,
+            #fff3db 0%,
+            #ffc821 25%,
+            #ff3c00);
+    background: -webkit-gradient(
+            linear, left top, left bottom,
+            from(#fff3db),
+            color-stop(0.25, #ffc821),
+            to(#ff3c00));
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px solid #b85f00;
+    -moz-box-shadow:
+    0px 1px 3px rgba(000,000,000,0.5),
+    inset 0px -1px 0px rgba(255,255,255,0.7);
+    -webkit-box-shadow:
+    0px 1px 3px rgba(000,000,000,0.5),
+    inset 0px -1px 0px rgba(255,255,255,0.7);
+    box-shadow:
+    0px 1px 3px rgba(000,000,000,0.5),
+    inset 0px -1px 0px rgba(255,255,255,0.7);
+    text-shadow:
+    0px -1px 1px rgba(000,000,000,0.2),
+    0px 1px 0px rgba(255,255,255,0.3);
+    cursor: pointer;
+    opacity:0.9;
+}
+#register-form form button:hover{
+	opacity:1;
+}
+#register-error{
+    width: 320px;
+    height: 60px;
+    text-align: center;
+    line-height: 90px;
+    padding: 10px;
+}
+.register-footer{
+    width: 100%;
+    height: 100px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #555d66;
+}
+.register-footer a{
+    text-decoration: none;
+    color: #555d66;
+}
+.register-footer a:hover{
+    color: #0073aa;
+}
+#codeInput{
+	float:left;
+	margin-top:6px;
+}
+#vCode {
+    width: 100px;
+    height: 40px;
+    cursor: pointer;
+    border:1px solid grey;
+    float: left;
+    margin-left:6px;
+}
+
+ #email{
+ 	font-size: 16px;
+ }
+

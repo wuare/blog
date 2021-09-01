@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wuareb.blog.mapper.ArticleMapper">
+	
+	<insert id="saveArticle" parameterType="top.wuareb.blog.domain.vo.article.Article">
+		insert into t_article(title,author,content,date,imgUrl,cid,uid,summary,lookNum,likeNum,hotState) values(#{title},#{author},#{content},#{date},#{imgUrl},#{cid},#{uid},#{summary},#{lookNum},#{likeNum},#{hotState})
+	</insert>
+	<select id="findArticleById" resultType="top.wuareb.blog.domain.vo.article.Article" parameterType="int">
+		select * from t_article where id = #{id}
+	</select>
+	
+	<select id="findArticleCount" resultType="int">
+		select count(*) from t_article
+	</select>
+	
+	<select id="findCountByCid" resultType="int" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom">
+		select count(*) from t_article where cid=#{categoryId}
+	</select>
+	
+	<select id="findAll" resultType="top.wuareb.blog.domain.vo.article.ArticleCustom" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom">
+		select t_article.*,t_category.name cateName from t_article,t_category where t_article.cid=t_category.id order by t_article.date DESC limit #{startPage},#{ps}
+	</select>
+	
+	<select id="findArticleByHot" resultType="top.wuareb.blog.domain.vo.article.Article">
+		select * from t_article where hotState = 1 order by date DESC limit 8
+	</select>
+	
+	<select id="findDate" resultType="Date">
+		select date from t_article
+	</select>
+	
+	<select id="findTag" resultType="top.wuareb.blog.domain.vo.article.TagCustom">
+		select * from t_tag
+	</select>
+	
+	<select id="findByCategoryId" resultType="top.wuareb.blog.domain.vo.article.ArticleCustom" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom">
+		select t_article.*,t_category.name cateName from t_article,t_category where t_article.cid=t_category.id and t_category.id=#{categoryId} order by t_article.date DESC limit #{startPage},#{ps}
+	</select>
+	
+	<select id="findLink" resultType="top.wuareb.blog.domain.vo.article.Link">
+		select * from t_link where state = 1
+	</select>
+	
+	<select id="findCountByTitle" resultType="int" parameterType="java.lang.String">
+		select count(*) from t_article 
+			where title like '%${value}%'
+				
+	</select>
+	
+	<select id="findArticleByTitle" resultType="top.wuareb.blog.domain.vo.article.ArticleCustom" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom">
+		select t_article.*,t_category.name cateName from t_article,t_category 
+			where t_article.cid=t_category.id and t_article.title like '%${title}%' order by t_article.date DESC limit #{startPage},#{ps}
+				
+	</select>
+	
+	<update id="modify" parameterType="top.wuareb.blog.domain.vo.article.ArticleCustom">
+		update t_article set title = #{title},content = #{content},imgUrl = #{imgUrl},cid = #{cid},summary = #{summary}
+			where id = #{id}
+	</update>
+	
+	<delete id="deleteArticleById" parameterType="int">
+		delete from t_article where id = #{id}
+	</delete>
+	
+	<select id="findLastById" parameterType="int" resultType="top.wuareb.blog.domain.vo.article.Article">
+		select id,title from t_article where id &lt; #{id} order by id desc limit 1
+	</select>
+	<select id="findNextById" parameterType="int" resultType="top.wuareb.blog.domain.vo.article.Article">
+		select id,title from t_article where id &gt; #{id} order by id desc limit 1
+	</select>
+	
+	<update id="updateLookNum" parameterType="top.wuareb.blog.domain.vo.article.Article">
+		update t_article set lookNum = #{lookNum} where id = #{id}
+	</update>
+	<update id="updateLikeNum" parameterType="top.wuareb.blog.domain.vo.article.Article">
+		update t_article set likeNum = #{likeNum} where id = #{id}
+	</update>
+	
+	<select id="findAddrByAid" resultType="top.wuareb.blog.domain.vo.article.Address" parameterType="int">
+		select * from t_article_addr where articleid = #{id}
+	</select>
+	<insert id="saveAddr" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_addr(addr) values(#{addr})
+	</insert>
+	<select id="lastId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+	<select id="articleLastId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+	<insert id="saveAddrAndAid" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_article_addr(articleid,addrid) values(#{articleid},#{id})
+	</insert>
+	
+	<select id="findCountByTid" resultType="int" parameterType="int">
+		select count(*) from t_article_tag where tid = #{id}
+	</select>
+	<select id="findArticleByTid" resultType="top.wuareb.blog.domain.vo.article.ArticleCustom" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom">
+		select t_article.*,t_category.name cateName from t_article,t_tag,t_article_tag,t_category 
+			where t_article.id = t_article_tag.aid and t_article.cid = t_category.id 
+			and t_tag.id = t_article_tag.tid and t_article_tag.tid = #{tid}
+			order by t_article.date DESC limit #{startPage},#{ps}
+	</select>
+	
+	<select id="findTagByAid" parameterType="int" resultType="top.wuareb.blog.domain.vo.article.Tag">
+		select t_tag.* from t_tag,t_article_tag where t_tag.id = t_article_tag.tid 
+			and t_article_tag.aid = #{id}
+	</select>
+	
+	<insert id="addTag" parameterType="top.wuareb.blog.domain.vo.article.Tag">
+		insert into t_tag(name) values(#{name})
+	</insert>
+	<select id="findTagByName" parameterType="top.wuareb.blog.domain.vo.article.Tag" resultType="top.wuareb.blog.domain.vo.article.Tag">
+		select * from t_tag where name = #{name}
+	</select>
+	
+	<insert id="addTagAndAid" parameterType="top.wuareb.blog.domain.vo.article.Tag">
+		insert into t_article_tag(tid,aid) values(#{id},#{aid})
+	</insert>
+	
+	<select id="findArticleNumByTid" parameterType="int" resultType="int">
+		select count(*) from t_article_tag where tid = #{tagid}
+	</select>
+	
+	<delete id="deleteAddr" parameterType="int">
+		delete from t_article_addr where articleid = #{id}
+	</delete>
+	<delete id="deleteTag" parameterType="int">
+		delete from t_article_tag where aid = #{id}
+	</delete>
+	
+	<delete id="deleteLinkById" parameterType="int">
+		delete from t_link where id = #{id}
+	</delete>
+	
+	<insert id="addLink" parameterType="top.wuareb.blog.domain.vo.article.Link">
+		insert into t_link(name,href,state) values(#{name},#{href},#{state})
+	</insert>
+	
+	<update id="ajaxHot" parameterType="int">
+		update t_article set hotState = 1 where id = #{id}
+	</update>
+	<update id="ajaxCancelHot" parameterType="int">
+		update t_article set hotState = 0 where id = #{id}
+	</update>
+</mapper>

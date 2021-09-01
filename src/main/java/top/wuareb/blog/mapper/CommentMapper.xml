@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper  3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wuareb.blog.mapper.CommentMapper">
+	<select id="findByAid" parameterType="int" resultType="top.wuareb.blog.domain.vo.comment.CommentCustom">
+		select t_comment.*,t_user.username,t_user.userUrl from t_comment,t_user 
+			where t_comment.uid = t_user.id and t_comment.aid = #{id} order by t_comment.date DESC
+	</select>
+	<select id="findReplyByCommentId" parameterType="int" resultType="top.wuareb.blog.domain.vo.comment.ReplyCustom">
+		select t_reply.*,t_user.username,t_user.userUrl from t_reply,t_user 
+			where t_reply.uid = t_user.id and t_reply.cid = #{id} order by t_reply.date DESC
+	</select>
+	<select id="findReplyByCommId" parameterType="int" resultType="top.wuareb.blog.domain.vo.comment.ReplyCustom">
+		select t_reply.*,t_user.username,t_user.userUrl from t_reply,t_user 
+			where t_reply.uid = t_user.id and t_reply.cid = #{id} order by t_reply.date
+	</select>
+	<select id="findReplyByReplyId" parameterType="int" resultType="top.wuareb.blog.domain.vo.comment.ReplyCustom">
+		select t_reply.*,t_user.username,t_user.userUrl from t_reply,t_user 
+			where t_reply.uid = t_user.id and t_reply.pid = #{id}
+	</select>
+	<select id="findPname" parameterType="int" resultType="java.lang.String">
+		select t_user.username from t_user,t_reply where t_user.id = t_reply.uid and t_reply.id = #{pid}
+	</select>
+	<insert id="saveComment" parameterType="top.wuareb.blog.domain.vo.comment.Comment">
+		insert into t_comment(content,date,aid,warnNum,likeNum,uid) values(#{content},#{date},#{aid},#{warnNum},#{likeNum},#{uid})
+	</insert>
+	
+	<insert id="replyToComment" parameterType="top.wuareb.blog.domain.vo.comment.Reply">
+		insert into t_reply(content,date,warnNum,likeNum,uid,cid) values(#{content},#{date},#{warnNum},#{likeNum},#{uid},#{cid})
+	</insert>
+	
+	<insert id="replyToReply" parameterType="top.wuareb.blog.domain.vo.comment.Reply">
+		insert into t_reply(content,date,warnNum,likeNum,uid,cid,pid) values(#{content},#{date},#{warnNum},#{likeNum},#{uid},#{cid},#{pid})
+	</insert>
+	
+	<select id="findCommentNum" resultType="int" parameterType="int">
+		select id from t_comment where aid = #{id}
+	</select>
+	<select id="findReplyNum" resultType="int" parameterType="int">
+		select id from t_reply where cid = #{id}
+	</select>
+	<select id="findCommentCount" resultType="int">
+		select count(*) from t_comment
+	</select>
+	<select id="findAllComment" parameterType="top.wuareb.blog.domain.vo.article.PageBeanCustom" resultType="top.wuareb.blog.domain.vo.comment.CommentCustom">
+		select t_comment.*,t_user.username,t_article.title from t_comment,t_user,t_article
+			where t_comment.aid = t_article.id and t_comment.uid = t_user.id order by t_comment.date DESC 
+			limit #{startPage},#{ps}
+	</select>
+	
+	<select id="findReplyByRid" resultType="top.wuareb.blog.domain.vo.comment.Reply" parameterType="int">
+		select * from t_reply where id = #{id}
+	</select>
+	<select id="findAddrByAid" resultType="top.wuareb.blog.domain.vo.article.Address" parameterType="int">
+		select * from t_reply_addr where replyid = #{id}
+	</select>
+	<insert id="saveAddr" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_addr(addr) values(#{addr})
+	</insert>
+	<select id="lastId" resultType="int">
+		SELECT LAST_INSERT_ID()
+	</select>
+	<insert id="saveAddrAndAid" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_reply_addr(addrid,replyid) values(#{id},#{replyid})
+	</insert>
+	<update id="updateLikeNum" parameterType="top.wuareb.blog.domain.vo.comment.Reply">
+		update t_reply set likeNum = #{likeNum} where id = #{id}
+	</update>
+	<select id="findAddrByAddr" parameterType="String" resultType="top.wuareb.blog.domain.vo.article.Address">
+		select * from t_addr where addr = #{addr}
+	</select>
+	
+	<select id="findCommentByCid" resultType="top.wuareb.blog.domain.vo.comment.Comment" parameterType="int">
+		select * from t_comment where id = #{id}
+	</select>
+	<insert id="saveAddrAndCommentid" parameterType="top.wuareb.blog.domain.vo.article.Address">
+		insert into t_reply_addr(addrid,commentid) values(#{id},#{commentid})
+	</insert>
+	<select id="findAddrByCommentid" resultType="top.wuareb.blog.domain.vo.article.Address" parameterType="int">
+		select * from t_reply_addr where commentid = #{id}
+	</select>
+	<update id="updateCommentLikeNum" parameterType="top.wuareb.blog.domain.vo.comment.Comment">
+		update t_comment set likeNum = #{likeNum} where id = #{id}
+	</update>
+	
+	<delete id="deleteCommentById" parameterType="int">
+		delete from t_comment where id = #{id}
+	</delete>
+	<delete id="deleteReplyById" parameterType="int">
+		delete from t_reply where id = #{id}
+	</delete>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper  3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.wuareb.blog.mapper.UserMapper">
+	<select id="findByUserAndPass" parameterType="top.wuareb.blog.domain.vo.user.User" resultType="top.wuareb.blog.domain.vo.user.User">
+		select * from t_user where username = #{username} and password = #{password}
+	</select>
+	<select id="ajaxFindByUsername"  parameterType="top.wuareb.blog.domain.vo.user.User" resultType="top.wuareb.blog.domain.vo.user.User">
+		select * from t_user where username = #{username}
+	</select>
+	<insert id="add" parameterType="top.wuareb.blog.domain.vo.user.User">
+		insert into t_user(username,password,email,state,code,firstname,userUrl) value(#{username},#{password},#{email},#{state},#{code},null,#{userUrl});
+	</insert>
+	<select id="findByCode" parameterType="top.wuareb.blog.domain.vo.user.User" resultType="top.wuareb.blog.domain.vo.user.User">
+		select * from t_user where code = #{code}
+	</select>
+	<update id="updateCode" parameterType="top.wuareb.blog.domain.vo.user.User">
+		update t_user set state = 1 where id = #{id}
+	</update>
+	<select id="findImg" resultType="top.wuareb.blog.domain.vo.user.Img">
+		select * from t_img
+	</select>
+	<update id="updatePerson" parameterType="top.wuareb.blog.domain.vo.user.User">
+		update t_user set firstname=#{firstname},lastname=#{lastname},nickname=#{nickname},
+			pubname=#{pubname},site=#{site},descrip=#{descrip},userUrl=#{userUrl} where id = #{id}
+	</update>
+	<select id="findUserById" parameterType="int" resultType="top.wuareb.blog.domain.vo.user.User">
+		select * from t_user where id = #{id}
+	</select>
+	
+	<select id="findAdminByUandP" parameterType="top.wuareb.blog.domain.vo.user.Admin" resultType="top.wuareb.blog.domain.vo.user.Admin">
+		select * from t_admin where username = #{username} and password = #{password}
+	</select>
+	
+	<select id="findAllImg" resultType="top.wuareb.blog.domain.vo.user.Img">
+		select * from t_img
+	</select>
+	
+	<insert id="addUserImg" parameterType="String">
+		insert into t_img(url) values(#{imgUrl})
+	</insert>
+	<delete id="deleteUserImg" parameterType="int">
+		delete from t_img where id = #{id}
+	</delete>
+</mapper>
